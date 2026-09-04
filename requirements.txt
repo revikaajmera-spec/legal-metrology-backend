@@ -26,3 +26,4 @@ httpx==0.28.1             # used by FastAPI's TestClient
 
 # --- Dev QoL ---
 python-dotenv==1.0.1
+requests==2.32.3
