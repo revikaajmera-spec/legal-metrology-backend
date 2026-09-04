@@ -1,0 +1,28 @@
+# --- Web framework & server ---
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+
+# --- Data validation / settings ---
+pydantic==2.10.3
+pydantic-settings==2.6.1
+
+# --- Database (light prototype = SQLite; swap DATABASE_URL for Postgres later) ---
+sqlalchemy==2.0.36
+alembic==1.14.0          # DB migrations, useful once schema stabilizes
+
+# --- File uploads / image handling (for later OCR/vision integration) ---
+python-multipart==0.0.19
+Pillow==11.0.0
+
+# --- Rule engine data files ---
+PyYAML==6.0.2
+
+# --- Reporting (PDF compliance report generation, Section 11 of proposal) ---
+reportlab==4.2.5
+
+# --- Testing ---
+pytest==8.3.4
+httpx==0.28.1             # used by FastAPI's TestClient
+
+# --- Dev QoL ---
+python-dotenv==1.0.1

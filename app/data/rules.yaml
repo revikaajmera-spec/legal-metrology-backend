@@ -1,0 +1,75 @@
+# rules.yaml
+# ----------
+# This is "rules as data" instead of "rules buried in code".
+# Every value here traces back to the Legal Metrology (Packaged
+# Commodities) Rules, 2011 that we extracted earlier.
+#
+# If a rule ever changes, you edit THIS file -- you do not have to
+# touch the Python code at all. That's the whole point of a
+# rules-as-code design (Section 6 of the proposal).
+
+# Rule 26 exemptions -- evaluated BEFORE any mandatory-declaration check.
+# If any of these match, the product is exempt from the rules entirely.
+exemptions:
+  - id: EXM-R26a-small-pack
+    description: "Rule 26(a): net weight/measure is 10g or 10ml or less"
+    condition: "small_pack"          # matched in code: qty <= 10 and unit in [g, ml]
+
+  - id: EXM-R26b-fast-food
+    description: "Rule 26(b): fast food items packed by restaurant/hotel"
+    condition: "fast_food"
+
+  - id: EXM-R26d-agri-produce
+    description: "Rule 26(d): agricultural produce in packages ABOVE 50kg"
+    condition: "agri_above_50kg"     # matched in code: category == agricultural AND qty > 50000 (g)
+
+  - id: EXM-R3-loose-goods
+    description: "Rule 3 scope: sold loose (not pre-packed) falls outside these Rules' packaging declarations"
+    condition: "sold_loose"
+
+# Rule 7 Table I -- minimum numeral height by NET QUANTITY (weight/volume)
+font_height_by_quantity:
+  - max_qty_g_or_ml: 200
+    min_height_mm_normal: 1
+    min_height_mm_molded: 2
+  - max_qty_g_or_ml: 500
+    min_height_mm_normal: 2
+    min_height_mm_molded: 4
+  - max_qty_g_or_ml: null          # null = "above the previous tier, no upper bound"
+    min_height_mm_normal: 4
+    min_height_mm_molded: 6
+
+# Rule 7 Table II -- minimum numeral height by PRINCIPAL DISPLAY PANEL AREA
+# (used when net quantity is declared by length, area, or number)
+font_height_by_area:
+  - max_area_cm2: 100
+    min_height_mm_normal: 1
+    min_height_mm_molded: 2
+  - max_area_cm2: 500
+    min_height_mm_normal: 2
+    min_height_mm_molded: 4
+  - max_area_cm2: 2500
+    min_height_mm_normal: 4
+    min_height_mm_molded: 6
+  - max_area_cm2: null
+    min_height_mm_normal: 6
+    min_height_mm_molded: 6
+
+# Mandatory declarations under Rule 6(1), checked when NOT exempt.
+# Each maps to a field on the Product model.
+mandatory_declarations:
+  - id: LM-R6-mrp
+    field: mrp_present
+    description: "Rule 6(1)(e): retail sale price (MRP)"
+  - id: LM-R6-mfr-details
+    field: manufacturer_present
+    description: "Rule 6(1)(a): name and address of manufacturer/packer/importer"
+  - id: LM-R6-mfr-address
+    field: manufacturer_address_present
+    description: "Rule 6(1)(a): complete address of manufacturer/packer/importer"
+  - id: LM-R6-date-of-mfr
+    field: date_of_manufacture_present
+    description: "Rule 6(1)(d): month and year of manufacture/pre-packing/import"
+  - id: LM-R6-consumer-care
+    field: consumer_care_present
+    description: "Rule 6(2): consumer care name/address/phone/email"
